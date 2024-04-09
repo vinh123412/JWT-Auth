@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jobs</title>
+  <link rel="stylesheet" href="./styles/jobs.css">
+</head>
+
+<body>
+  <div id="userInfo"></div>
+  <form id="createJobForm">
+    <h2>Create a New Job</h2>
+    <div class="input-group">
+      <label class="label" for="company">Company:</label>
+      <input class="input-field" type="text" id="company" name="company" required>
+    </div>
+    <div class="input-group">
+      <label class="label" for="position">Position:</label>
+      <input class="input-field" type="text" id="position" name="position" required>
+    </div>
+    <div class="input-group">
+      <label class="label" for="status">Status:</label>
+      <select class="input-field" id="status" name="status">
+        <option value="interview">Interview</option>
+        <option value="declined">Declined</option>
+        <option value="pending">Pending</option>
+      </select>
+    </div>
+    <button type="submit">Create Job</button>
+  </form>
+
+
+  <div id="jobsList">
+
+  </div>
+
+  <script type="module" src="jobs.js"></script>
+</body>
+
+</html>
