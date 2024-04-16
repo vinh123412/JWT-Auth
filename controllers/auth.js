@@ -15,7 +15,7 @@ const register = async (req, res) => {
   //create user
   const user = await User.create(tempUser)
   // create token
-  const accessToken = jwt.sign({ userId: user._id, name: user.name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' })
+  const accessToken = jwt.sign({ userId: user._id, name: user.name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' })
   const refreshToken = jwt.sign({ userId: user._id, name: user.name }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' })
   const token = await Token.create({ token: refreshToken, userId: user._id })
 
@@ -37,7 +37,7 @@ const login = async (req, res) => {
     throw new UnauthenticatedError('Invalid credentials')
   }
 
-  const accessToken = jwt.sign({ userId: user._id, name: user.name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1m' })
+  const accessToken = jwt.sign({ userId: user._id, name: user.name }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10s' })
   const refreshToken = jwt.sign({ userId: user._id, name: user.name }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' })
   const token = await Token.create({ token: refreshToken, userId: user._id })
   res.status(StatusCodes.OK).json({ name: user.name, accessToken, refreshToken })

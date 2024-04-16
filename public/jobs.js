@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   const userInfoElement = document.getElementById('userInfo');
   const jobsListElement = document.getElementById('jobsList');
   const createJobForm = document.getElementById('createJobForm');
-  let accessToken = await handleTokenExpiry();
   const userName = localStorage.getItem('userName');
 
   // display user name
@@ -18,6 +17,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   //Delete job function
   const deleteJob = async (jobId) => {
+    const accessToken = await handleTokenExpiry();
     const deleteResponse = await fetch(`/api/v1/jobs/${jobId}`, {
       method: 'DELETE',
       headers: {
@@ -36,30 +36,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 
   //display all jobs
-  const jobResponse = await fetch('/api/v1/jobs', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    }
-  });
-
-  if (jobResponse.ok) {
-    const jobsData = await jobResponse.json();
-    const allJobs = jobsData.jobs;
-    allJobs.forEach((job) => {
-      const jobItem = document.createElement('div');
-      jobItem.classList.add("jobster");
-      jobItem.id = `job-${job._id}`;
-      jobItem.innerHTML =
-        `
-        <p>company: ${job.company}</p>
-        <p>position: ${job.position}</p>
-        <p>status: ${job.status}</p>
-        <button class="update-btn" data-jobid="${job._id}">Update</button>
-        <button class="delete-btn" data-jobid="${job._id}">Delete</button>
-        `
-      jobsListElement.appendChild(jobItem);
+  const displayJobs = async () => {
+    const accessToken = await handleTokenExpiry();
+    const jobResponse = await fetch('/api/v1/jobs', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
     });
 
+    if (jobResponse.ok) {
+      const jobsData = await jobResponse.json();
+      const allJobs = jobsData.jobs;
+      allJobs.forEach((job) => {
+        const jobItem = document.createElement('div');
+        jobItem.classList.add("jobster");
+        jobItem.id = `job-${job._id}`;
+        jobItem.innerHTML =
+          `
+          <p>company: ${job.company}</p>
+          <p>position: ${job.position}</p>
+          <p>status: ${job.status}</p>
+          <button class="update-btn" data-jobid="${job._id}">Update</button>
+          <button class="delete-btn" data-jobid="${job._id}">Delete</button>
+          `
+        jobsListElement.appendChild(jobItem);
+      });
+    }
 
     // Add event listener for update and delete buttons
     jobsListElement.addEventListener('click', (e) => {
@@ -74,12 +76,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   }
 
+  displayJobs();
 
 
   //Create Job
   createJobForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    const accessToken = await handleTokenExpiry();
     const company = document.getElementById('company').value;
     const position = document.getElementById('position').value;
     const status = document.getElementById('status').value;
