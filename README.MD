@@ -2,5 +2,5 @@
 
 Create read update delete jobs
 
-# Use JWT to Authenticate
+# Use JWT for Authorization
 Use access token and refresh token
